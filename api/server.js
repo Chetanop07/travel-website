@@ -31,6 +31,10 @@ mongoose.connect(process.env.MONGO_URI, {
 // =======================
 // MODELS
 // =======================
+// Exported function for Vercel
+module.exports = async (req, res) => {
+    res.status(200).json({ message: "Serverless backend working!" });
+};
 
 // USER
 const User = mongoose.model('User', new mongoose.Schema({
