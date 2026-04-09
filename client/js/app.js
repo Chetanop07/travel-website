@@ -1,6 +1,10 @@
 const API = "http://localhost:5000/api";
 const token = localStorage.getItem("token");
-
+fetch('https://travel-website-iota-six.vercel.app/api/book', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bookingData)
+});
 // Load hotels
 async function loadHotels() {
     const search = document.getElementById("search").value;

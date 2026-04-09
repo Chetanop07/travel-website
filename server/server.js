@@ -13,8 +13,11 @@ const app = express();
 // MIDDLEWARE
 // =======================
 app.use(express.json());
-app.use(cors());
-
+app.use(cors({
+    origin: 'https://travel-website-iota-six.vercel.app',
+    methods: ['GET','POST','DELETE','PUT'],
+    credentials: true
+}));
 // Serve frontend files
 app.use(express.static(path.join(__dirname, 'frontend')));
 

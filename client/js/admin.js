@@ -41,5 +41,9 @@ async function loadBookings() {
         console.error(err);
     }
 }
-
+fetch('https://travel-website-iota-six.vercel.app/api/book', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bookingData)
+});
 loadBookings();

@@ -1,6 +1,10 @@
 const district = localStorage.getItem("district")?.trim().toLowerCase();
 document.getElementById("districtTitle").innerText = district + " Hotels";
-
+fetch('https://travel-website-iota-six.vercel.app/api/book', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(bookingData)
+});
 // ✅ PROPER HOTEL DATA WITH IMAGES
 const hotelsData = {
     shimla: [
