@@ -1,150 +1,141 @@
-const API = "http://localhost:5000/api";
+// =======================
+// API URL & Token
+// =======================
+const API = "https://travel-website-iota-six.vercel.app/api";
 const token = localStorage.getItem("token");
-fetch('https://travel-website-iota-six.vercel.app/api/book', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bookingData)
-});
+
+// =======================
 // Load hotels
+// =======================
 async function loadHotels() {
-    const search = document.getElementById("search").value;
+    const search = document.getElementById("search").value || "Delhi";
 
-async function loadHotels() {
-    const search = document.getElementById("search").value;
+    try {
+        const res = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${search}`, {
+            method: "GET",
+            headers: {
+                "X-RapidAPI-Key": "28abea317cmsheabedb8e1367235p1a4444jsncfdfed2ed02",
+                "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
+            }
+        });
 
-    const res = await fetch(`https://wft-geo-db.p.rapidapi.com/v1/geo/cities?namePrefix=${search}`, {
-        method: "GET",
-        headers: {
-            "X-RapidAPI-Key": " 28abea317cmsheabedb8e1367235p1a4444jsncfdfed2ed02", // your key
-            "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com"
-        }
-    });
+        const data = await res.json();
 
-    const data = await res.json();
+        document.getElementById("hotels").innerHTML = data.data.map(city => `
+            <div class="card">
+                <img src="https://source.unsplash.com/300x200/?hotel,${city.city}">
+                <h3>${city.city}</h3>
+                <p>${city.country}</p>
+                <p>₹${Math.floor(Math.random() * 3000 + 1500)}</p>
+                <button onclick="bookHotel('${city.city}')">Book</button>
+            </div>
+        `).join('');
 
-    document.getElementById("hotels").innerHTML = data.data.map(city => `
-        <div class="card">
-            <img src="https://source.unsplash.com/300x200/?hotel,${city.city}">
-            <h3>${city.city}</h3>
-            <p>${city.country}</p>
-            <p>₹${Math.floor(Math.random() * 3000 + 1500)}</p>
-            <button onclick="bookHotel('${city.city}')">Book</button>
-        </div>
-    `).join('');
+    } catch (err) {
+        console.error("Error loading hotels:", err);
+        document.getElementById("hotels").innerHTML = "<p>Failed to load hotels.</p>";
+    }
 }
+
+// =======================
 // Book hotel
-async function bookHotel(id, name) {
+// =======================
+async function bookHotel(name) {
     if (!token) {
         alert("Please login first");
         window.location.href = "login.html";
         return;
     }
 
-    const res = await fetch(`${API}/book`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": token
-        },
-        body: JSON.stringify({
-            hotelId: id,
-            hotelName: name,
-            date: new Date(),
-            guests: 1
-        })
-    });
+    const bookingData = {
+        hotelName: name,
+        date: new Date(),
+        guests: 1
+    };
 
-    const data = await res.json().catch(() => ({}));
+    try {
+        const res = await fetch(`${API}/book`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify(bookingData)
+        });
 
-    // ⚠️ IMPORTANT: Save bookingId
-    localStorage.setItem("bookingId", data._id || "");
+        const data = await res.json();
+        localStorage.setItem("bookingId", data._id || "");
+        window.location.href = "payment.html";
 
-    window.location.href = "payment.html";
+    } catch (err) {
+        console.error("Booking failed:", err);
+        alert("Booking failed. Try again.");
+    }
 }
 
+// =======================
 // Submit review
+// =======================
 async function submitReview() {
-    const message = document.getElementById("review").value;
-    const rating = document.getElementById("rating").value;
+    const name = document.getElementById("reviewName").value;
+    const message = document.getElementById("reviewText").value;
+    const rating = parseInt(document.getElementById("rating").value);
 
     if (!token) {
-        alert("Login required");
+        alert("Please login first");
         return;
     }
 
-    await fetch(`${API}/review`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": token
-        },
-        body: JSON.stringify({ message, rating })
-    });
+    try {
+        await fetch(`${API}/review`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({ name, message, rating })
+        });
 
-    loadReviews();
+        alert("Review submitted!");
+        loadReviews();
+
+    } catch (err) {
+        console.error("Review submission failed:", err);
+        alert("Failed to submit review.");
+    }
 }
 
+// =======================
 // Load reviews
+// =======================
 async function loadReviews() {
-    const res = await fetch(`${API}/reviews`);
-    const data = await res.json();
+    try {
+        const res = await fetch(`${API}/reviews`);
+        const data = await res.json();
 
-    document.getElementById("reviews").innerHTML = data.map(r => `
-        <div class="review">
-            <p>⭐ ${r.rating}/5</p>
-            <p>${r.message}</p>
-        </div>
-    `).join('');
+        document.getElementById("reviewsList").innerHTML = data.map(r => `
+            <div class="card">
+                <h3>${r.name}</h3>
+                <p>${"⭐".repeat(r.rating)}</p>
+                <p>${r.message}</p>
+            </div>
+        `).join('');
+
+    } catch (err) {
+        console.error("Failed to load reviews:", err);
+        document.getElementById("reviewsList").innerHTML = "<p>Failed to load reviews.</p>";
+    }
 }
 
-// Initial load
-loadHotels();
-loadReviews();
+// =======================
+// Helper: Star rating
+// =======================
 function getStars(rating) {
     return "⭐".repeat(rating);
 }
 
-async function loadReviews() {
-    const res = await fetch(`${API}/reviews`);
-    const data = await res.json();
-
-    document.getElementById("reviews").innerHTML = data.map(r => `
-        <div class="review">
-            <p class="star">${getStars(r.rating)}</p>
-            <p>${r.message}</p>
-        </div>
-    `).join('');
-    }
-}
-// LOAD REVIEWS
-async function loadReviews() {
-    const res = await fetch(`${API}/reviews`);
-    const data = await res.json();
-
-    document.getElementById("reviewsList").innerHTML = data.map(r => `
-        <div class="card">
-            <h3>${r.name}</h3>
-            <p>${"⭐".repeat(r.rating)}</p>
-            <p>${r.message}</p>
-        </div>
-    `).join('');
-}
-
-// SUBMIT REVIEW
-async function submitReview() {
-    const name = document.getElementById("reviewName").value;
-    const message = document.getElementById("reviewText").value;
-    const rating = document.getElementById("rating").value;
-
-    await fetch(`${API}/review`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ name, message, rating })
-    });
-
-    alert("Review submitted!");
-    loadReviews();
-}
-
-// AUTO LOAD
+// =======================
+// Initial load
+// =======================
+loadHotels();
 loadReviews();

@@ -18,7 +18,8 @@ app.use(cors({
     methods: ['GET','POST','DELETE','PUT'],
     credentials: true
 }));
-// Serve frontend files
+
+// Serve frontend static files
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // =======================
@@ -34,12 +35,6 @@ mongoose.connect(process.env.MONGO_URI, {
 // =======================
 // MODELS
 // =======================
-// Exported function for Vercel
-module.exports = async (req, res) => {
-    res.status(200).json({ message: "Serverless backend working!" });
-};
-
-// USER
 const User = mongoose.model('User', new mongoose.Schema({
     name: String,
     email: { type: String, unique: true },
@@ -47,7 +42,6 @@ const User = mongoose.model('User', new mongoose.Schema({
     isAdmin: { type: Boolean, default: false }
 }));
 
-// BOOKING
 const Booking = mongoose.model('Booking', new mongoose.Schema({
     name: String,
     phone: String,
@@ -59,7 +53,6 @@ const Booking = mongoose.model('Booking', new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 }));
 
-// REVIEW
 const Review = mongoose.model('Review', new mongoose.Schema({
     name: String,
     message: String,
@@ -87,8 +80,6 @@ const auth = (req, res, next) => {
 // =======================
 // AUTH ROUTES
 // =======================
-
-// REGISTER
 app.post('/api/register', async (req, res) => {
     const { name, email, password } = req.body;
     try {
@@ -101,7 +92,6 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// LOGIN
 app.post('/api/login', async (req, res) => {
     try {
         const user = await User.findOne({ email: req.body.email });

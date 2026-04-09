@@ -1,3 +1,6 @@
+// =======================
+// Load all bookings
+// =======================
 async function loadBookings() {
     const token = localStorage.getItem("adminToken");
 
@@ -10,14 +13,14 @@ async function loadBookings() {
     }
 
     try {
-        const res = await fetch("http://localhost:5000/api/admin/bookings", {
+        // Use your deployed backend URL here
+        const res = await fetch("https://travel-website-iota-six.vercel.app/api/admin/bookings", {
             headers: {
                 "Authorization": token
             }
         });
 
         const data = await res.json();
-
         console.log("Bookings:", data); // DEBUG
 
         if (!data.length) {
@@ -38,12 +41,12 @@ async function loadBookings() {
         `).join('');
 
     } catch (err) {
-        console.error(err);
+        console.error("Error fetching bookings:", err);
+        document.getElementById("bookings").innerHTML = "<p>Failed to load bookings.</p>";
     }
 }
-fetch('https://travel-website-iota-six.vercel.app/api/book', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bookingData)
-});
+
+// =======================
+// Initialize
+// =======================
 loadBookings();

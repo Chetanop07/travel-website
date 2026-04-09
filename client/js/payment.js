@@ -1,27 +1,44 @@
-const API = "http://localhost:5000/api/payment";
+// =======================
+// API URL
+// =======================
+const API = "https://travel-website-iota-six.vercel.app/api/payment";
 
+// =======================
+// Get booking ID
+// =======================
 const bookingId = localStorage.getItem("bookingId");
-fetch('https://travel-website-iota-six.vercel.app/api/book', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bookingData)
-});
+
+// Remove broken fetch at the top
+// fetch('https://travel-website-iota-six.vercel.app/api/book', ... ) -> REMOVED
+
+// =======================
+// Confirm payment
+// =======================
 async function confirmPayment() {
     if (!bookingId) {
         alert("No booking found");
         return;
     }
 
-    await fetch(`${API}/success`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ bookingId })
-    });
+    try {
+        const res = await fetch(`${API}/success`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ bookingId })
+        });
 
-    alert("Payment Successful!");
+        if (!res.ok) {
+            throw new Error("Payment confirmation failed");
+        }
 
-    localStorage.removeItem("bookingId");
-    window.location.href = "index.html";
+        alert("Payment Successful!");
+        localStorage.removeItem("bookingId");
+        window.location.href = "index.html";
+
+    } catch (err) {
+        console.error("Payment error:", err);
+        alert("Payment failed. Please try again.");
+    }
 }

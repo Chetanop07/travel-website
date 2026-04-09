@@ -1,11 +1,10 @@
+// =======================
+// Get selected district
+// =======================
 const district = localStorage.getItem("district")?.trim().toLowerCase();
-document.getElementById("districtTitle").innerText = district + " Hotels";
-fetch('https://travel-website-iota-six.vercel.app/api/book', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(bookingData)
-});
-// ✅ PROPER HOTEL DATA WITH IMAGES
+document.getElementById("districtTitle").innerText = district ? district.charAt(0).toUpperCase() + district.slice(1) + " Hotels" : "Hotels";
+
+// ✅ Proper hotel data with images
 const hotelsData = {
     shimla: [
         { name: "Shimla Grand", img: "images/hotels/shimla1.jpg" },
@@ -51,9 +50,11 @@ const hotelsData = {
     ]
 };
 
+// =======================
+// Display hotels
+// =======================
 const list = document.getElementById("hotelList");
 
-// ✅ DISPLAY HOTELS
 if (!district || !hotelsData[district]) {
     list.innerHTML = "<h2>No hotels available</h2>";
 } else {
@@ -65,7 +66,9 @@ if (!district || !hotelsData[district]) {
     `).join('');
 }
 
-// ✅ BOOK HOTEL
+// =======================
+// Select hotel and go to contact page
+// =======================
 function selectHotel(name) {
     localStorage.setItem("selectedHotel", name);
     window.location.href = "contact.html";
