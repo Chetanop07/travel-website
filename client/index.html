@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Explore Himachal</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h2>🌍 Explore Himachal</h2>
+
+    <div>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="register.html">Register</a>
+        <a href="contact.html">Contact</a>
+        <a href="admin-login.html">Admin</a>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>Explore Himachal Pradesh</h1>
+        <p>Discover the beauty of mountains, valleys & luxury stays</p>
+    </div>
+</section>
+<!-- DISTRICT SECTION -->
+<h1 class="title">Choose Your Destination</h1>
+
+<div class="grid">
+
+    <div class="card" onclick="goToHotels('shimla')">
+        <img src="images/shimla.jpg">
+        <div class="overlay"></div>
+        <h3>Shimla</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('kullu')">
+        <img src="images/kullu.jpg">
+        <div class="overlay"></div>
+        <h3>Kullu / Manali</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('kangra')">
+        <img src="images/kangra.jpg">
+        <div class="overlay"></div>
+        <h3>Kangra (Dharamshala)</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('kinnaur')">
+        <img src="images/kinnaur.jpg">
+        <div class="overlay"></div>
+        <h3>Kinnaur</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('spiti')">
+        <img src="images/spiti.jpg">
+        <div class="overlay"></div>
+        <h3>Lahaul & Spiti</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('chamba')">
+        <img src="images/chamba.jpg">
+        <div class="overlay"></div>
+        <h3>Chamba</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('solan')">
+        <img src="images/solan.jpg">
+        <div class="overlay"></div>
+        <h3>Solan</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('mandi')">
+        <img src="images/mandi.jpg">
+        <div class="overlay"></div>
+        <h3>Mandi</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('bilaspur')">
+        <img src="images/bilaspur.jpg">
+        <div class="overlay"></div>
+        <h3>Bilaspur</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('hamirpur')">
+        <img src="images/hampirpur.jpg">
+        <div class="overlay"></div>
+        <h3>Hamirpur</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('una')">
+        <img src="images/una.jpg">
+        <div class="overlay"></div>
+        <h3>Una</h3>
+    </div>
+
+    <div class="card" onclick="goToHotels('sirmaur')">
+        <img src="images/sirmaur.jpg">
+        <div class="overlay"></div>
+        <h3>Sirmaur</h3>
+    </div>
+
+</div>
+<!-- REVIEWS -->
+<section class="reviews-section">
+    <h2>⭐ User Reviews</h2>
+
+    <div class="review-form">
+        <input id="reviewName" placeholder="Your Name">
+        <textarea id="reviewText" placeholder="Write your experience..."></textarea>
+        <input id="rating" type="number" max="5" placeholder="Rating (1-5)">
+        <button onclick="submitReview()">Submit Review</button>
+    </div>
+
+    <div id="reviewsList" class="grid"></div>
+</section>
+<script>
+function goToHotels(district) {
+    localStorage.setItem("district", district);
+    window.location.href = "hotels.html";
+}
+</script>
+
+</body>
+</html>

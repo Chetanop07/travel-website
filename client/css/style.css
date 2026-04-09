@@ -1,0 +1,357 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(15px);
+    z-index: 1000;
+}
+
+.navbar a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.navbar a:hover {
+    color: #38bdf8;
+}
+
+/* HERO */
+.hero {
+    height: 90vh;
+    background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.overlay {
+    text-align: center;
+    background: rgba(0,0,0,0.5);
+    padding: 40px;
+    border-radius: 20px;
+}
+
+.overlay h1 {
+    font-size: 50px;
+}
+
+.overlay p {
+    margin: 10px 0;
+}
+
+/* SEARCH */
+.search-box input {
+    padding: 12px;
+    width: 250px;
+    border-radius: 5px;
+    border: none;
+}
+
+.search-box button {
+    padding: 12px 20px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* SECTION */
+.section {
+    padding: 40px;
+    text-align: center;
+}
+
+/* GRID */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+/* CARD */
+.card {
+    width: 280px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-10px) scale(1.03);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card h3 {
+    margin: 10px;
+}
+
+.card p {
+    margin: 5px 10px;
+}
+
+/* BUTTON */
+.card button {
+    margin: 10px;
+    padding: 10px;
+    width: 90%;
+    background: linear-gradient(45deg, #22c55e, #4ade80);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* REVIEW FORM */
+.review-form textarea {
+    width: 300px;
+    height: 80px;
+    padding: 10px;
+}
+
+.review-form input {
+    padding: 10px;
+    margin: 10px;
+}
+
+.review-form button {
+    padding: 10px 20px;
+    background: #38bdf8;
+    border: none;
+    cursor: pointer;
+}
+
+/* REVIEW CARD */
+.review {
+    width: 280px;
+    background: rgba(255,255,255,0.1);
+    padding: 15px;
+    border-radius: 10px;
+}
+
+/* STAR STYLE */
+.star {
+    color: gold;
+    font-size: 18px;
+}
+.title {
+    text-align: center;
+    margin: 20px;
+}
+
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.card {
+    width: 250px;
+    cursor: pointer;
+}
+/* HERO BACKGROUND FIX */
+.hero {
+    height: 60vh;
+    background: url('https://images.unsplash.com/photo-1501785888041-af3ef285b470') no-repeat center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* OVERLAY */
+.overlay {
+    background: rgba(0,0,0,0.5);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+/* NAVBAR FIX */
+.navbar {
+    position: sticky;
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 40px;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+}
+
+.navbar a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #38bdf8;
+}
+
+/* TITLE */
+.title {
+    text-align: center;
+    margin: 30px;
+}
+
+/* GRID */
+.grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+}
+
+/* CARD */
+.card {
+    width: 260px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.card h3 {
+    text-align: center;
+    padding: 10px;
+}
+.reviews-section {
+    padding: 50px;
+    text-align: center;
+}
+
+.review-form input,
+.review-form textarea {
+    display: block;
+    margin: 10px auto;
+    padding: 12px;
+    width: 300px;
+    border-radius: 8px;
+    border: none;
+}
+.title {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 36px;
+    color: white;
+}
+
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    padding: 40px;
+}
+
+/* CARD */
+.card {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+/* IMAGE */
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+/* OVERLAY */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+}
+
+/* TITLE */
+.card h3 {
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    color: white;
+    font-size: 20px;
+}
+
+/* HOVER EFFECT */
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card:hover img {
+    transform: scale(1.1);
+    transition: 0.4s;
+}
+/* HERO SECTION */
+.hero {
+    height: 90vh;
+    background: url('images/bg.jpg') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    background: rgba(0,0,0,0.5);
+    padding: 40px;
+    border-radius: 15px;
+}
+
+.hero h1 {
+    font-size: 50px;
+}
+
+.hero p {
+    font-size: 20px;
+    margin: 15px 0;
+}
+
+.hero button {
+    padding: 12px 25px;
+    background: linear-gradient(45deg, #38bdf8, #6366f1);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}

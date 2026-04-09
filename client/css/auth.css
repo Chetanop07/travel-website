@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a);
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* GLASS CARD */
+.auth-box {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    width: 300px;
+}
+
+.auth-box h2 {
+    margin-bottom: 20px;
+    color: white;
+}
+
+.auth-box input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+}
+
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.auth-box p {
+    color: white;
+    margin-top: 10px;
+}
+
+.auth-box a {
+    color: #38bdf8;
+}

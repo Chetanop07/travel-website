@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Contact & Booking</title>
+    <link rel="stylesheet" href="css/contact.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <h2>🌍 Explore Himachal</h2>
+</nav>
+
+<div class="container">
+
+    <!-- LEFT INFO -->
+    <div class="info">
+        <h1>Complete Your Booking</h1>
+        <p id="hotelName"></p>
+
+        <div class="details">
+            <p>✔ Secure Booking</p>
+            <p>✔ Best Price Guarantee</p>
+            <p>✔ 24/7 Support</p>
+        </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="form-box">
+        <h2>Book Now</h2>
+
+        <input id="name" placeholder="Full Name">
+        <input id="phone" placeholder="Phone Number">
+        <input id="email" placeholder="Email">
+        
+        <input id="date" type="date">
+        <input id="guests" type="number" placeholder="Number of Guests">
+
+        <textarea id="message" placeholder="Special Requests"></textarea>
+
+        <button onclick="submitBooking()">Confirm Booking</button>
+    </div>
+
+</div>
+
+<script>
+const hotel = localStorage.getItem("selectedHotel");
+document.getElementById("hotelName").innerText = "Hotel: " + hotel;
+
+async function submitBooking() {
+    const data = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        date: document.getElementById("date").value,
+        guests: document.getElementById("guests").value,
+        message: document.getElementById("message").value,
+        hotelName: hotel
+    };
+
+    await fetch("http://localhost:5000/api/book", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": localStorage.getItem("token")
+        },
+        body: JSON.stringify(data)
+    });
+
+    alert("Booking Confirmed! 🎉");
+}
+</script>
+
+</body>
+</html>
