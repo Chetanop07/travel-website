@@ -1,3 +1,6 @@
+const API = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://travel-website-iota-six.vercel.app/api";
 // =======================
 // API URL & Token
 // =======================

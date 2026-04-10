@@ -16,8 +16,11 @@
 </div>
 
 <script>
+    const API = window.location.hostname === "localhost"
+    ? "http://localhost:5000/api"
+    : "https://travel-website-iota-six.vercel.app/api";
 async function login() {
-    const res = await fetch("https://travel-website-iota-six.vercel.app/api/admin/login", {
+    const res = await fetch(`${API}/admin/login`, {
         method: "POST",
         headers: {"Content-Type":"application/json"},
         body: JSON.stringify({
