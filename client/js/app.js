@@ -1,11 +1,8 @@
 const API = window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
-    : "https://travel-website-iota-six.vercel.app/api";
-// =======================
-// API URL & Token
-// =======================
-const API = "https://travel-website-iota-six.vercel.app/api";
-const token = localStorage.getItem("token");
+    : "https://travel-website-git-main-chetanop07s-projects.vercel.app/api";
+
+    const token = localStorage.getItem("token");
 
 // =======================
 // Load hotels
@@ -51,8 +48,11 @@ async function bookHotel(name) {
     }
 
     const bookingData = {
+        name: "Guest User",
+        email: "guest@email.com",
+        phone: "9999999999",
         hotelName: name,
-        date: new Date(),
+        date: new Date().toISOString(),
         guests: 1
     };
 
@@ -66,13 +66,16 @@ async function bookHotel(name) {
             body: JSON.stringify(bookingData)
         });
 
+        if (!res.ok) throw new Error();
+
         const data = await res.json();
-        localStorage.setItem("bookingId", data._id || "");
+
+        localStorage.setItem("bookingId", data.booking._id);
         window.location.href = "payment.html";
 
     } catch (err) {
-        console.error("Booking failed:", err);
-        alert("Booking failed. Try again.");
+        console.error(err);
+        alert("Booking failed ❌");
     }
 }
 

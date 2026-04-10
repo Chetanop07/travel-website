@@ -16,15 +16,9 @@ const app = express();
 app.use(express.json());
 
 app.use(cors({
-    origin: [
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
-        'https://travel-website-iota-six.vercel.app'
-    ],
-    methods: ['GET','POST','DELETE','PUT'],
-    credentials: true
+    origin: "*",
+    methods: ["GET","POST","PUT","DELETE"],
 }));
-
 // Serve frontend
 app.use(express.static(path.join(__dirname, 'frontend')));
 
@@ -150,29 +144,24 @@ app.post('/api/login', async (req, res) => {
 // =======================
 
 app.post('/api/book', async (req, res) => {
-    console.log("BOOKING BODY:", req.body);
 
-    const { name, phone, email, hotelName, date, guests } = req.body;
+    const { hotelName, date, guests } = req.body;
 
-    if (!name || !phone || !email || !hotelName || !date || !guests) {
-        return res.status(400).json({ message: "All fields are required" });
+    if (!hotelName || !date || !guests) {
+        return res.status(400).json({ message: "Required fields missing" });
     }
 
     try {
-        const booking = new Booking({
-            ...req.body,
-            guests: Number(req.body.guests)
-        });
-
+        const booking = new Booking(req.body);
         await booking.save();
 
-        res.status(200).json({
+        res.json({
             message: "Booking successful",
             booking
         });
 
     } catch (err) {
-        console.error("BOOKING ERROR:", err);
+        console.error(err);
         res.status(500).json({ message: "Booking failed" });
     }
 });

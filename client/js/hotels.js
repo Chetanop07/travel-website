@@ -1,6 +1,6 @@
 const API = window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
-    : "https://travel-website-iota-six.vercel.app/api";
+    : "https://travel-website-git-main-chetanop07s-projects.vercel.app/api";
 // =======================
 // Get selected district
 // =======================

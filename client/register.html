@@ -23,42 +23,29 @@
 <script>
 const API = window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
-    : "https://travel-website-iota-six.vercel.app/api";
-<script>
-
-const API = window.location.hostname === "localhost"
-    ? "http://localhost:5000/api"
-    : "https://travel-website-iota-six.vercel.app/api";
+    : "https://travel-website-git-main-chetanop07s-projects.vercel.app/api";
 
 async function register() {
-    console.log("Button clicked");
-
     const name = document.getElementById("name").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    console.log("Sending:", { name, email, password }); // 👈 DEBUG
-
     try {
-        const res = await fetch("http://localhost:5000/api/register", {
+        const res = await fetch(`${API}/register`, {
             method: "POST",
             headers: {"Content-Type":"application/json"},
             body: JSON.stringify({ name, email, password })
         });
 
-        console.log("Status:", res.status); // 👈 DEBUG
+        if (!res.ok) throw new Error();
 
-        const data = await res.json();
-        console.log("Response:", data); // 👈 DEBUG
+        alert("Registered Successfully ✅");
+        window.location.href = "login.html";
 
-        alert(data.message || "Done");
-
-    } catch (err) {
-        console.error("ERROR:", err);
-        alert("Fetch failed ❌");
+    } catch {
+        alert("Registration failed ❌");
     }
 }
 </script>
-
 </body>
 </html>
