@@ -1,8 +1,6 @@
-const API = window.location.hostname === "localhost"
-    ? "http://localhost:5000/api"
-    : "https://travel-website-iota-six.vercel.app/api";
 require('dotenv').config();
 require('dns').setDefaultResultOrder('ipv4first');
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -16,24 +14,27 @@ const app = express();
 // MIDDLEWARE
 // =======================
 app.use(express.json());
+
 app.use(cors({
-    origin: 'https://travel-website-iota-six.vercel.app',
+    origin: [
+        'http://localhost:5500',
+        'http://127.0.0.1:5500',
+        'https://travel-website-iota-six.vercel.app'
+    ],
     methods: ['GET','POST','DELETE','PUT'],
     credentials: true
 }));
 
-// Serve frontend static files
+// Serve frontend
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // =======================
 // MONGODB CONNECTION
 // =======================
-mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => console.log("MongoDB Connected"))
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log("MongoDB Connected ✅"))
 .catch(err => console.error("MongoDB connection error:", err));
+
 // =======================
 // MODELS
 // =======================
@@ -67,78 +68,127 @@ const Review = mongoose.model('Review', new mongoose.Schema({
 // =======================
 const auth = (req, res, next) => {
     const token = req.headers['authorization'];
-    if (!token) return res.status(401).send("No token");
+
+    if (!token) return res.status(401).json({ message: "No token" });
 
     try {
         const verified = jwt.verify(token, process.env.JWT_SECRET);
         req.user = verified;
         next();
     } catch (err) {
-        console.error("JWT verification error:", err);
-        res.status(400).send("Invalid token");
+        console.error("JWT error:", err);
+        res.status(400).json({ message: "Invalid token" });
     }
 };
 
 // =======================
 // AUTH ROUTES
 // =======================
+
+// REGISTER
 app.post('/api/register', async (req, res) => {
+    console.log("REGISTER BODY:", req.body);
+
     const { name, email, password } = req.body;
+
+    if (!name || !email || !password) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
     try {
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
         const hash = await bcrypt.hash(password, 10);
-        await new User({ name, email, password: hash }).save();
-        res.send("Registered Successfully");
+
+        const user = new User({ name, email, password: hash });
+        await user.save();
+
+        res.status(200).json({ message: "Registered Successfully" });
+
     } catch (err) {
-        console.error(err);
-        res.status(400).send("User already exists");
+        console.error("REGISTER ERROR:", err);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
+// LOGIN
 app.post('/api/login', async (req, res) => {
+    console.log("LOGIN BODY:", req.body);
+
     try {
         const user = await User.findOne({ email: req.body.email });
-        if (!user) return res.status(400).send("User not found");
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found" });
+        }
 
         const valid = await bcrypt.compare(req.body.password, user.password);
-        if (!valid) return res.status(400).send("Wrong password");
+
+        if (!valid) {
+            return res.status(400).json({ message: "Wrong password" });
+        }
 
         const token = jwt.sign(
             { id: user._id, isAdmin: user.isAdmin },
             process.env.JWT_SECRET
         );
 
-        res.json({ token });
+        res.status(200).json({ token });
+
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Server error");
+        console.error("LOGIN ERROR:", err);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
 // =======================
 // BOOKING ROUTES
 // =======================
+
 app.post('/api/book', async (req, res) => {
+    console.log("BOOKING BODY:", req.body);
+
+    const { name, phone, email, hotelName, date, guests } = req.body;
+
+    if (!name || !phone || !email || !hotelName || !date || !guests) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
     try {
-        const booking = new Booking(req.body);
+        const booking = new Booking({
+            ...req.body,
+            guests: Number(req.body.guests)
+        });
+
         await booking.save();
-        res.json(booking);
+
+        res.status(200).json({
+            message: "Booking successful",
+            booking
+        });
+
     } catch (err) {
-        console.error(err);
-        res.status(500).send("Booking failed");
+        console.error("BOOKING ERROR:", err);
+        res.status(500).json({ message: "Booking failed" });
     }
 });
 
 // =======================
 // REVIEW ROUTES
 // =======================
+
 app.post('/api/review', async (req, res) => {
     try {
         const review = new Review(req.body);
         await review.save();
-        res.send("Review added");
+        res.json({ message: "Review added" });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to add review");
+        res.status(500).json({ message: "Failed to add review" });
     }
 });
 
@@ -148,21 +198,30 @@ app.get('/api/reviews', async (req, res) => {
         res.json(reviews);
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to fetch reviews");
+        res.status(500).json({ message: "Failed to fetch reviews" });
     }
 });
 
 // =======================
 // ADMIN ROUTES
 // =======================
-app.post('/api/admin/login', async (req, res) => {
-    const { email, password } = req.body;
-    try {
-        const admin = await User.findOne({ email, isAdmin: true });
-        if (!admin) return res.status(400).send("Not admin");
 
-        const valid = await bcrypt.compare(password, admin.password);
-        if (!valid) return res.status(400).send("Wrong password");
+app.post('/api/admin/login', async (req, res) => {
+    try {
+        const admin = await User.findOne({
+            email: req.body.email,
+            isAdmin: true
+        });
+
+        if (!admin) {
+            return res.status(400).json({ message: "Not admin" });
+        }
+
+        const valid = await bcrypt.compare(req.body.password, admin.password);
+
+        if (!valid) {
+            return res.status(400).json({ message: "Wrong password" });
+        }
 
         const token = jwt.sign(
             { id: admin._id, isAdmin: true },
@@ -170,46 +229,56 @@ app.post('/api/admin/login', async (req, res) => {
         );
 
         res.json({ token });
+
     } catch (err) {
         console.error(err);
-        res.status(500).send("Server error");
+        res.status(500).json({ message: "Server error" });
     }
 });
 
 app.get('/api/admin/bookings', auth, async (req, res) => {
-    if (!req.user.isAdmin) return res.status(403).send("Access denied");
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+    }
+
     try {
         const bookings = await Booking.find().sort({ createdAt: -1 });
         res.json(bookings);
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to fetch bookings");
+        res.status(500).json({ message: "Failed to fetch bookings" });
     }
 });
 
 app.delete('/api/admin/booking/:id', auth, async (req, res) => {
-    if (!req.user.isAdmin) return res.status(403).send("Access denied");
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+    }
+
     try {
         await Booking.findByIdAndDelete(req.params.id);
-        res.send("Deleted");
+        res.json({ message: "Deleted successfully" });
     } catch (err) {
         console.error(err);
-        res.status(500).send("Failed to delete booking");
+        res.status(500).json({ message: "Delete failed" });
     }
 });
 
 // =======================
 // CREATE ADMIN (RUN ONCE)
 // =======================
+
 app.get('/create-admin', async (req, res) => {
     try {
         const hash = await bcrypt.hash("admin123", 10);
+
         await new User({
             name: "Admin",
             email: "admin@gmail.com",
             password: hash,
             isAdmin: true
         }).save();
+
         res.send("Admin created");
     } catch (err) {
         console.error(err);
@@ -220,6 +289,7 @@ app.get('/create-admin', async (req, res) => {
 // =======================
 // FRONTEND ROUTES
 // =======================
+
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
@@ -227,5 +297,9 @@ app.get('*', (req, res) => {
 // =======================
 // SERVER START
 // =======================
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT} 🚀`);
+});

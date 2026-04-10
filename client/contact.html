@@ -44,9 +44,10 @@
 </div>
 
 <script>
-    const API = window.location.hostname === "localhost"
+const API = window.location.hostname === "localhost"
     ? "http://localhost:5000/api"
     : "https://travel-website-iota-six.vercel.app/api";
+
 const hotel = localStorage.getItem("selectedHotel");
 document.getElementById("hotelName").innerText = "Hotel: " + hotel;
 
@@ -61,16 +62,24 @@ async function submitBooking() {
         hotelName: hotel
     };
 
-    await fetch("http://localhost:5000/api/book", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": localStorage.getItem("token")
-        },
-        body: JSON.stringify(data)
-    });
+    try {
+        const res = await fetch(`${API}/book`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            },
+            body: JSON.stringify(data)
+        });
 
-    alert("Booking Confirmed! 🎉");
+        if (!res.ok) throw new Error("Booking failed");
+
+        alert("Booking Confirmed! 🎉");
+
+    } catch (err) {
+        console.error(err);
+        alert("Booking failed ❌");
+    }
 }
 </script>
 
