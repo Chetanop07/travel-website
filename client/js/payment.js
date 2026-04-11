@@ -1,9 +1,7 @@
 // =======================
 // Confirm payment
 // =======================
-const API = window.location.hostname === "localhost"
-    ? "http://localhost:5000/api"
-    : "https://travel-website-git-main-chetanop07s-projects.vercel.app/api";
+const API = "https://travel-website-production-27eb.up.railway.app/api";
 
 const bookingId = localStorage.getItem("bookingId");
 
