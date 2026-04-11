@@ -1,28 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-    <link rel="stylesheet" href="css/auth.css">
-</head>
-<body>
-
-<div class="auth-container">
-    <div class="auth-box">
-        <h2>Welcome Back 👋</h2>
-
-        <input id="email" placeholder="Email">
-        <input id="password" type="password" placeholder="Password">
-
-        <button onclick="login()">Login</button>
-
-        <p>Don't have an account? <a href="register.html">Register</a></p>
-    </div>
-</div>
 <script>
 const API = "https://travel-website-production-27eb.up.railway.app/api";
+
 async function login() {
+    console.log("Login clicked");
+
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+
+    if (!email || !password) {
+        alert("Please fill all fields");
+        return;
+    }
 
     try {
         const res = await fetch(`${API}/login`, {
@@ -31,18 +19,24 @@ async function login() {
             body: JSON.stringify({ email, password })
         });
 
-        if (!res.ok) throw new Error();
+        console.log("Status:", res.status);
 
         const data = await res.json();
+        console.log("Response:", data);
+
+        if (!res.ok) {
+            alert(data.message || "Login failed ❌");
+            return;
+        }
 
         localStorage.setItem("token", data.token);
         alert("Login successful ✅");
+
         window.location.href = "index.html";
 
-    } catch {
-        alert("Login failed ❌");
+    } catch (err) {
+        console.error(err);
+        alert("Network error ❌");
     }
 }
 </script>
-</body>
-</html>

@@ -1,5 +1,5 @@
 
-    const API = "https://travel-website-production-27eb.up.railway.app/api";";
+    const API = "https://travel-website-production-27eb.up.railway.app/api";
 
     const token = localStorage.getItem("token");
 
