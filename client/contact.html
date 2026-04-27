@@ -7,9 +7,7 @@
 <body>
 
 <!-- NAVBAR -->
-<nav class="navbar">
-    <h2>🌍 Explore Himachal</h2>
-</nav>
+<div id="navbar"></div>
 
 <div class="container">
 
@@ -79,6 +77,12 @@ async function submitBooking() {
     }
 }
 </script>
-
+<script>
+fetch("navbar.html")
+.then(res => res.text())
+.then(data => {
+    document.getElementById("navbar").innerHTML = data;
+});
+</script>
 </body>
 </html>

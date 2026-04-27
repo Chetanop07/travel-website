@@ -4,37 +4,55 @@
     <title>Admin Login</title>
     <link rel="stylesheet" href="css/admin.css">
 </head>
+
 <body>
 
-<div class="admin-box">
-    <h2>Admin Login</h2>
+<div class="auth-container">
+    <div class="auth-box">
 
-    <input id="email" placeholder="Email">
-    <input id="password" type="password" placeholder="Password">
+        <h2>🔐 Admin Login</h2>
 
-    <button onclick="login()">Login</button>
+        <input id="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+
+        <button onclick="login()">Login</button>
+
+    </div>
 </div>
 
+<!-- ✅ PUT SCRIPT HERE (VERY IMPORTANT POSITION) -->
 <script>
-    const API = "https://travel-website-production-27eb.up.railway.app/api";;
-async function login() {
-    const res = await fetch(`${API}/admin/login`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value
-        })
-    });
+const API = "https://travel-website-production-27eb.up.railway.app/api";
 
-    const data = await res.json();
+window.login = async function () {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-    if (data.token) {
-        localStorage.setItem("adminToken", data.token);
-        alert("Login successful ✅");
-        window.location.href = "admin.html";
-    } else {
-        alert("Login failed ❌");
+    if (!email || !password) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    try {
+        const res = await fetch(`${API}/admin/login`, {
+            method: "POST",
+            headers: {"Content-Type":"application/json"},
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (data.token) {
+            localStorage.setItem("adminToken", data.token);
+            alert("Login successful ✅");
+            window.location.href = "admin.html";
+        } else {
+            alert(data.message || "Login failed ❌");
+        }
+
+    } catch (err) {
+        console.error(err);
+        alert("Server error ❌");
     }
 }
 </script>

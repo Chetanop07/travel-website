@@ -1,27 +1,75 @@
 body {
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #020617, #1e3a8a);
+}
+
+/* CENTER CONTAINER */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* GLASS BOX */
+.auth-box {
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    padding: 40px;
+    border-radius: 15px;
+    width: 320px;
     text-align: center;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
 }
 
-.admin-box {
-    margin-top: 100px;
+.auth-box h2 {
+    color: white;
+    margin-bottom: 5px;
 }
 
-input {
-    display: block;
-    margin: 10px auto;
-    padding: 10px;
+.subtitle {
+    color: #cbd5f5;
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    cursor: pointer;
-}
-
-.booking {
+/* INPUT */
+.auth-box input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 8px;
+    outline: none;
     background: rgba(255,255,255,0.1);
-    margin: 10px;
-    padding: 10px;
+    color: white;
+}
+
+/* BUTTON */
+.auth-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(45deg, #38bdf8, #6366f1);
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.auth-box button:hover {
+    transform: scale(1.05);
+}
+.dashboard {
+    padding: 20px;
+    display: grid;
+    gap: 20px;
+}
+
+/* FORCE VISIBILITY */
+#bookings {
+    color: white;
+    font-size: 16px;
 }

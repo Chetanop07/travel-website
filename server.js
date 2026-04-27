@@ -44,6 +44,7 @@ const Booking = mongoose.model('Booking', new mongoose.Schema({
     date: String,
     guests: Number,
     message: String,
+    status: { type: String, default: "Pending" }, // ✅ NEW
     createdAt: { type: Date, default: Date.now }
 }));
 
@@ -261,4 +262,24 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} 🚀`);
+});
+app.put('/api/admin/booking/:id', auth, async (req, res) => {
+    if (!req.user.isAdmin) {
+        return res.status(403).json({ message: "Access denied" });
+    }
+
+    try {
+        const { status } = req.body;
+
+        const booking = await Booking.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+
+        res.json({ message: "Status updated", booking });
+
+    } catch (err) {
+        res.status(500).json({ message: "Update failed" });
+    }
 });
