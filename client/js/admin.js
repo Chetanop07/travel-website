@@ -1,4 +1,4 @@
-const API = "https://travel-website-iota-six.vercel.app/api";
+const API = "https://travel-website-production-27eb.up.railway.app/api";
 
 // Load bookings
 async function loadBookings() {
@@ -26,23 +26,23 @@ async function loadBookings() {
             return;
         }
 
-        document.getElementById("bookings").innerHTML = data.map(b => `
-            <div class="booking-card">
-                <h3>${b.hotelName}</h3>
-                <p><b>Name:</b> ${b.name}</p>
-                <p><b>Email:</b> ${b.email}</p>
-                <p><b>Phone:</b> ${b.phone}</p>
-                <p><b>Date:</b> ${b.date}</p>
-                <p><b>Guests:</b> ${b.guests}</p>
-
-                <p class="status">Status: ${b.status || "Pending"}</p>
-
-                <div class="actions">
-                    <button class="accept" onclick="updateStatus('${b._id}', 'Accepted')">Accept</button>
-                    <button class="reject" onclick="updateStatus('${b._id}', 'Rejected')">Reject</button>
-                </div>
-            </div>
-        `).join('');
+       document.getElementById("bookings").innerHTML = data.map(b => `
+    <tr>
+        <td>${b.hotelName}</td>
+        <td>${b.name}</td>
+        <td>${b.email}</td>
+        <td>${b.phone}</td>
+        <td>${new Date(b.date).toLocaleDateString()}</td>
+        <td>${b.guests}</td>
+        <td class="status ${b.status}">
+            ${b.status || "Pending"}
+        </td>
+        <td>
+            <button class="accept" onclick="updateStatus('${b._id}', 'Accepted')">✔</button>
+            <button class="reject" onclick="updateStatus('${b._id}', 'Rejected')">✖</button>
+        </td>
+    </tr>
+`).join('');
 
     } catch (err) {
         console.error("Error:", err);

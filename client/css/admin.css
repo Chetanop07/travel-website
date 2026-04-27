@@ -73,3 +73,70 @@ body {
     color: white;
     font-size: 16px;
 }
+/* TABLE CONTAINER */
+.table-container {
+    padding: 20px;
+    overflow-x: auto;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* HEADER */
+thead {
+    background: rgba(0,0,0,0.6);
+}
+
+th, td {
+    padding: 12px;
+    text-align: center;
+    color: white;
+}
+
+/* ROWS */
+tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    transition: 0.3s;
+}
+
+tbody tr:hover {
+    background: rgba(255,255,255,0.08);
+}
+
+/* STATUS COLORS */
+.status.Pending {
+    color: #facc15;
+}
+
+.status.Accepted {
+    color: #22c55e;
+}
+
+.status.Rejected {
+    color: #ef4444;
+}
+
+/* BUTTONS */
+button {
+    border: none;
+    padding: 6px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.accept {
+    background: #22c55e;
+    color: white;
+}
+
+.reject {
+    background: #ef4444;
+    color: white;
+}
